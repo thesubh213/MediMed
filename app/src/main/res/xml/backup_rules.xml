@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Configure backup rules for Android 11 and below -->
+<full-backup-content>
+    <!-- Exclude databases to guarantee local-only operation by default -->
+    <exclude domain="database" path="medimed.db" />
+</full-backup-content>

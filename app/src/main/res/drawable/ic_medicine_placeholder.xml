@@ -1,0 +1,67 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="120dp"
+    android:height="120dp"
+    android:viewportWidth="120"
+    android:viewportHeight="120">
+
+    <!--
+        Medicine placeholder icon — shown when no custom image is set.
+        Centered vertical capsule on a soft circular background.
+    -->
+
+    <!-- Background circle: Soft Apricot -->
+    <path
+        android:fillColor="#F9DBBD"
+        android:pathData="M60,60m-48,0a48,48 0,1 1,96 0a48,48 0,1 1,-96 0"/>
+
+    <!-- Inner subtle ring -->
+    <path
+        android:strokeColor="#A53860"
+        android:strokeWidth="1.2"
+        android:strokeAlpha="0.12"
+        android:pathData="M60,60m-38,0a38,38 0,1 1,76 0a38,38 0,1 1,-76 0"
+        android:fillColor="#00000000"/>
+
+    <!-- Capsule top half: Berry Crush -->
+    <path
+        android:fillColor="#A53860"
+        android:pathData="M48,35 a12,12 0,0 1,24 0 L72,60 L48,60 Z"/>
+
+    <!-- Capsule bottom half: Blush Rose -->
+    <path
+        android:fillColor="#DA627D"
+        android:pathData="M48,60 L72,60 L72,85 a12,12 0,0 1,-24 0 Z"/>
+
+    <!-- Center separator -->
+    <path
+        android:fillColor="#450920"
+        android:fillAlpha="0.5"
+        android:pathData="M48,59 h24 v2 h-24 z"/>
+
+    <!-- Gloss highlight on top -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:fillAlpha="0.25"
+        android:pathData="M52,40 Q54,36 58,36 L58,39 Q56,39 55,40 Z"/>
+
+    <!-- Medical cross badge (bottom-right) -->
+    <path
+        android:fillColor="#DA627D"
+        android:pathData="M80,78m-12,0a12,12 0,1 1,24 0a12,12 0,1 1,-24 0"/>
+
+    <!-- Cross background circle -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M80,78m-10,0a10,10 0,1 1,20 0a10,10 0,1 1,-20 0"/>
+
+    <!-- Cross horizontal bar -->
+    <path
+        android:fillColor="#A53860"
+        android:pathData="M74,77 h12 v2 h-12 z"/>
+
+    <!-- Cross vertical bar -->
+    <path
+        android:fillColor="#A53860"
+        android:pathData="M79,72 h2 v12 h-2 z"/>
+
+</vector>

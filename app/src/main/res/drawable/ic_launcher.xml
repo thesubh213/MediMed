@@ -1,0 +1,68 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+
+    <!--
+        Legacy launcher icon fallback for devices below API 26.
+        Combines background + foreground in a single vector.
+    -->
+
+    <!-- Background: Night Bordeaux base -->
+    <path
+        android:fillColor="#450920"
+        android:pathData="M0,0h108v108h-108z"/>
+
+    <!-- Background: Berry Crush diagonal overlay -->
+    <path
+        android:pathData="M0,108L108,0L108,108Z"
+        android:fillColor="#A53860"
+        android:fillAlpha="0.55"/>
+
+    <!-- Subtle ring -->
+    <path
+        android:strokeColor="#FFA5AB"
+        android:strokeWidth="0.8"
+        android:strokeAlpha="0.10"
+        android:pathData="M54,54m-44,0a44,44 0,1 1,88 0a44,44 0,1 1,-88 0"
+        android:fillColor="#00000000"/>
+
+    <!-- Soft glow circle -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:fillAlpha="0.08"
+        android:pathData="M54,54m-26,0a26,26 0,1 1,52 0a26,26 0,1 1,-52 0"/>
+
+    <!-- Capsule top half: Soft Apricot -->
+    <path
+        android:fillColor="#F9DBBD"
+        android:pathData="M44,32 a10,10 0,0 1,20 0 L64,54 L44,54 Z"/>
+
+    <!-- Capsule bottom half: Cotton Candy -->
+    <path
+        android:fillColor="#FFA5AB"
+        android:pathData="M44,54 L64,54 L64,66 a10,10 0,0 1,-20 0 Z"/>
+
+    <!-- Center divider -->
+    <path
+        android:fillColor="#450920"
+        android:fillAlpha="0.6"
+        android:pathData="M44,53.25 h20 v1.5 h-20 z"/>
+
+    <!-- Medical cross circle -->
+    <path
+        android:fillColor="#DA627D"
+        android:pathData="M66,40m-8,0a8,8 0,1 1,16 0a8,8 0,1 1,-16 0"/>
+
+    <!-- Cross horizontal bar -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M61,39 h10 v2 h-10 z"/>
+
+    <!-- Cross vertical bar -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M65,35 h2 v10 h-2 z"/>
+
+</vector>

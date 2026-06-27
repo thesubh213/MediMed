@@ -1,0 +1,70 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+
+    <!--
+        Foreground layer for adaptive icon.
+        All critical artwork sits within the 72×72 safe zone (centered at 54,54 → 18 to 90).
+        The capsule + cross emblem is centered at (54, 54).
+    -->
+
+    <!-- Outer soft glow circle behind the emblem -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:fillAlpha="0.08"
+        android:pathData="M54,54m-26,0a26,26 0,1 1,52 0a26,26 0,1 1,-52 0"/>
+
+    <!-- === Pill Capsule (vertical, centered at 54,54) === -->
+
+    <!-- Capsule top half: Soft Apricot -->
+    <path
+        android:fillColor="#F9DBBD"
+        android:pathData="M44,42 L64,42 L64,54 L44,54 Z
+                          M54,42 m-10,0 a10,10 0,0 1,20 0 L44,42 Z"/>
+    <!-- Proper rounded top cap -->
+    <path
+        android:fillColor="#F9DBBD"
+        android:pathData="M44,42 a10,10 0,0 1,20 0 L64,54 L44,54 Z"/>
+
+    <!-- Capsule bottom half: Cotton Candy -->
+    <path
+        android:fillColor="#FFA5AB"
+        android:pathData="M44,54 L64,54 L64,66 a10,10 0,0 1,-20 0 Z"/>
+
+    <!-- Center divider line -->
+    <path
+        android:fillColor="#450920"
+        android:fillAlpha="0.6"
+        android:pathData="M44,53.25 h20 v1.5 h-20 z"/>
+
+    <!-- Pill highlight reflection (premium gloss) -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:fillAlpha="0.35"
+        android:pathData="M47,36 Q49,33 52,33 L52,36 Q50,36 49,37 Z"/>
+
+    <!-- === Medical Cross (small, bottom-right of capsule) === -->
+    <group
+        android:pivotX="66"
+        android:pivotY="40"
+        android:rotation="0">
+
+        <!-- Cross circle background -->
+        <path
+            android:fillColor="#DA627D"
+            android:pathData="M66,40m-8,0a8,8 0,1 1,16 0a8,8 0,1 1,-16 0"/>
+
+        <!-- Horizontal bar of cross -->
+        <path
+            android:fillColor="#FFFFFF"
+            android:pathData="M61,39 h10 v2 h-10 z"/>
+
+        <!-- Vertical bar of cross -->
+        <path
+            android:fillColor="#FFFFFF"
+            android:pathData="M65,35 h2 v10 h-2 z"/>
+    </group>
+
+</vector>

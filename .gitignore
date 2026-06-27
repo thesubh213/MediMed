@@ -1,0 +1,26 @@
+# Built artifacts
+*.apk
+*.aar
+*.ap_
+*.aab
+
+# Gradle files
+.gradle/
+build/
+app/build/
+local.properties
+.navigation/
+
+# IDE settings
+.idea/
+*.iml
+*.iws
+.kotlin/
+.externalNativeBuild/
+.cxx/
+cmake-build-*/
+
+# Logs & temp files
+*.log
+.DS_Store
+Thumbs.db

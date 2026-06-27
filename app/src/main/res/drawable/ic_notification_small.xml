@@ -1,0 +1,42 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+
+    <!--
+        Notification small icon — must be single-color (white) silhouette.
+        Centered pill capsule with medical cross emblem.
+        The system tints this with the notification accent color.
+    -->
+
+    <!-- Pill capsule outline (vertical, centered) -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M9,4 a3,3 0,0 1,6 0 L15,11 L9,11 Z"/>
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M9,13 L15,13 L15,20 a3,3 0,0 1,-6 0 Z"/>
+
+    <!-- Separator gap -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:fillAlpha="0.0"
+        android:pathData="M8.5,11.5 h7 v1 h-7 z"/>
+
+    <!-- Small medical cross (top-right) -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M17,5m-3.5,0a3.5,3.5 0,1 1,7 0a3.5,3.5 0,1 1,-7 0"/>
+
+    <!-- Cross horizontal -->
+    <path
+        android:fillColor="#450920"
+        android:pathData="M15,4.5 h4 v1 h-4 z"/>
+
+    <!-- Cross vertical -->
+    <path
+        android:fillColor="#450920"
+        android:pathData="M16.5,3 h1 v4 h-1 z"/>
+
+</vector>
