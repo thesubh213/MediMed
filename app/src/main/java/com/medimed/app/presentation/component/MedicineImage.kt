@@ -20,17 +20,7 @@ import androidx.compose.ui.semantics.semantics
 import com.medimed.app.presentation.theme.LocalDimens
 import java.io.File
 
-/**
- * Displays a medicine image from a local file path, falling back to a placeholder
- * icon if the image is missing, corrupt, or the path is null/blank.
- *
- * @param imagePath Absolute path to the image file on internal storage, or null.
- * @param modifier Standard compose modifier.
- * @param backgroundColor Background color shown behind/around the image.
- * @param medicineName Optional medicine name used for accessibility descriptions.
- *                     When provided, screen readers will announce "Image of [name]"
- *                     instead of the generic "Medicine image".
- */
+
 @Composable
 fun MedicineImage(
     imagePath: String?,
@@ -51,28 +41,21 @@ fun MedicineImage(
         if (bitmap != null) {
             Image(
                 bitmap = bitmap,
-                contentDescription = null, // Described by parent Box semantics
+                contentDescription = null, 
                 modifier = Modifier.fillMaxSize(),
                 contentScale = ContentScale.Crop
             )
         } else {
             Image(
                 painter = androidx.compose.ui.res.painterResource(id = com.medimed.app.R.drawable.ic_medicine_placeholder),
-                contentDescription = null, // Described by parent Box semantics
+                contentDescription = null, 
                 modifier = Modifier.fillMaxSize()
             )
         }
     }
 }
 
-/**
- * Remembers a decoded [ImageBitmap] from a file path. Returns null if:
- * - The path is null or blank
- * - The file does not exist (e.g., deleted or moved)
- * - The file is corrupt or cannot be decoded as a bitmap
- *
- * The result is cached by path so the same file is not decoded on every recomposition.
- */
+
 @Composable
 fun rememberBitmapFromPath(path: String?): ImageBitmap? {
     if (path.isNullOrBlank()) return null
@@ -85,7 +68,7 @@ fun rememberBitmapFromPath(path: String?): ImageBitmap? {
                 null
             }
         } catch (e: Exception) {
-            // Corrupt file, OOM, or IO error — gracefully fall back to placeholder
+            
             e.printStackTrace()
             null
         }

@@ -26,10 +26,7 @@ class MedicineAlarmScheduler(private val context: Context) {
         const val EXTRA_SCHEDULED_TIME = "extra_scheduled_time"
     }
 
-    /**
-     * Calculates the next upcoming scheduled dose time after the given timestamp.
-     * Returns null if no future doses can be scheduled (e.g. past end date).
-     */
+    
     fun calculateNextDoseTime(medicine: Medicine, fromTimeMillis: Long): Long? {
         if (!medicine.isActive) return null
 
@@ -42,10 +39,10 @@ class MedicineAlarmScheduler(private val context: Context) {
             set(Calendar.MILLISECOND, 0)
         }
 
-        // The effective starting time is the maximum of startDate and now
+        
         val effectiveStart = maxOf(medicine.startDate, fromTimeMillis)
 
-        // If the end date has already passed, we cannot schedule
+        
         if (medicine.endDate != null && effectiveStart >= medicine.endDate) {
             return null
         }
@@ -66,7 +63,7 @@ class MedicineAlarmScheduler(private val context: Context) {
     private fun getNextDailyDose(medicine: Medicine, effectiveStart: Long): Long? {
         val candidates = mutableListOf<Long>()
         
-        // Check times for today and the next 7 days to cover timezone boundaries
+        
         val calendar = Calendar.getInstance()
         calendar.timeInMillis = effectiveStart
         
@@ -125,7 +122,7 @@ class MedicineAlarmScheduler(private val context: Context) {
         val calendar = Calendar.getInstance()
         calendar.timeInMillis = effectiveStart
 
-        for (dayOffset in 0..14) { // Check up to 14 days ahead
+        for (dayOffset in 0..14) { 
             val baseDay = Calendar.getInstance().apply {
                 timeInMillis = calendar.timeInMillis
                 add(Calendar.DAY_OF_YEAR, dayOffset)
@@ -163,7 +160,7 @@ class MedicineAlarmScheduler(private val context: Context) {
         if (intervalHours <= 0) return null
         val intervalMillis = intervalHours.toLong() * 60 * 60 * 1000
 
-        // The sequence starts at the first scheduled time on the startDate.
+        
         val baseTimeStr = medicine.timesOfDay.firstOrNull() ?: "08:00"
         val timeParts = baseTimeStr.split(":")
         val startHour = timeParts.getOrNull(0)?.toIntOrNull() ?: 8
@@ -177,7 +174,7 @@ class MedicineAlarmScheduler(private val context: Context) {
             set(Calendar.MILLISECOND, 0)
         }.timeInMillis
 
-        // If now is before sequence start, the very first dose is the sequence start
+        
         if (effectiveStart < sequenceStart) {
             return if (medicine.endDate == null || sequenceStart <= medicine.endDate) {
                 sequenceStart
@@ -186,7 +183,7 @@ class MedicineAlarmScheduler(private val context: Context) {
             }
         }
 
-        // Otherwise, find the next interval step
+        
         val diff = effectiveStart - sequenceStart
         val steps = (diff / intervalMillis) + 1
         val nextTime = sequenceStart + (steps * intervalMillis)
@@ -198,9 +195,7 @@ class MedicineAlarmScheduler(private val context: Context) {
         }
     }
 
-    /**
-     * Schedules the next upcoming reminder alarm for the medicine.
-     */
+    
     @SuppressLint("ScheduleExactAlarm")
     fun scheduleAlarmForMedicine(medicine: Medicine) {
         if (!medicine.isActive) {
@@ -208,7 +203,7 @@ class MedicineAlarmScheduler(private val context: Context) {
             return
         }
 
-        // Check if we can schedule exact alarms
+        
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             if (!alarmManager.canScheduleExactAlarms()) {
                 Log.w(TAG, "Cannot schedule exact alarms - permission missing. Alarm will be inaccurate.")
@@ -228,7 +223,7 @@ class MedicineAlarmScheduler(private val context: Context) {
             putExtra(EXTRA_SCHEDULED_TIME, nextTime)
         }
 
-        // We use a unique request code per medicine to support multiple alarms (one active alarm per medicine)
+        
         val pendingIntent = PendingIntent.getBroadcast(
             context,
             medicine.id.toInt(),
@@ -238,7 +233,7 @@ class MedicineAlarmScheduler(private val context: Context) {
 
         try {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                // Schedule to wake up even if the device is in idle doze mode
+                
                 alarmManager.setExactAndAllowWhileIdle(
                     AlarmManager.RTC_WAKEUP,
                     nextTime,
@@ -257,9 +252,7 @@ class MedicineAlarmScheduler(private val context: Context) {
         }
     }
 
-    /**
-     * Schedules a snooze alarm to trigger in the future.
-     */
+    
     @SuppressLint("ScheduleExactAlarm")
     fun scheduleSnoozeAlarm(medicineId: Long, scheduledTime: Long, snoozeTime: Long) {
         val intent = Intent(context, MedicineReminderReceiver::class.java).apply {
@@ -295,9 +288,7 @@ class MedicineAlarmScheduler(private val context: Context) {
         }
     }
 
-    /**
-     * Cancels any active alarms scheduled for the medicine.
-     */
+    
     fun cancelAlarmForMedicine(medicine: Medicine) {
         val intent = Intent(context, MedicineReminderReceiver::class.java).apply {
             action = ACTION_TRIGGER_REMINDER
@@ -315,9 +306,7 @@ class MedicineAlarmScheduler(private val context: Context) {
         }
     }
 
-    /**
-     * Queries the database and schedules alarms for all active medicines.
-     */
+    
     suspend fun rescheduleAllAlarms(repository: MedicineRepository) {
         val activeMedicines = repository.getActiveMedicines().first()
         Log.d(TAG, "Rescheduling alarms for ${activeMedicines.size} active medicines.")

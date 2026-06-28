@@ -77,8 +77,6 @@ fun DashboardScreen(
     var medicineToDelete by remember { mutableStateOf<Medicine?>(null) }
     var hasNotificationPermission by remember { mutableStateOf(true) }
     var hasExactAlarmPermission by remember { mutableStateOf(true) }
-    var hasDndPermission by remember { mutableStateOf(true) }
-    var hasOverlayPermission by remember { mutableStateOf(true) }
 
     val checkPermissions = {
         hasNotificationPermission = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
@@ -93,19 +91,6 @@ fun DashboardScreen(
         hasExactAlarmPermission = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
             alarmManager.canScheduleExactAlarms()
-        } else {
-            true
-        }
-
-        hasDndPermission = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-            notificationManager.isNotificationPolicyAccessGranted
-        } else {
-            true
-        }
-
-        hasOverlayPermission = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            Settings.canDrawOverlays(context)
         } else {
             true
         }
@@ -156,7 +141,7 @@ fun DashboardScreen(
                 .padding(paddingValues)
                 .background(MaterialTheme.colorScheme.background)
         ) {
-            // Header
+            
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -174,8 +159,8 @@ fun DashboardScreen(
                 )
             }
 
-            // Permissions setup banner
-            val showPermissionWarning = !hasNotificationPermission || !hasExactAlarmPermission || !hasDndPermission || !hasOverlayPermission
+            
+            val showPermissionWarning = !hasNotificationPermission || !hasExactAlarmPermission
             AnimatedVisibility(
                 visible = showPermissionWarning,
                 enter = fadeIn(tween(300)) + slideInVertically(tween(300)),
@@ -184,8 +169,6 @@ fun DashboardScreen(
                 PermissionWarningBanner(
                     hasNotificationPermission = hasNotificationPermission,
                     hasExactAlarmPermission = hasExactAlarmPermission,
-                    hasDndPermission = hasDndPermission,
-                    hasOverlayPermission = hasOverlayPermission,
                     context = context,
                     onRequestNotificationPermission = {
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
@@ -195,7 +178,7 @@ fun DashboardScreen(
                 )
             }
 
-            // Horizontal Date Bar
+            
             DateSelectorBar(
                 selectedDate = selectedDate,
                 onDateSelected = { viewModel.selectDate(it) }
@@ -203,12 +186,12 @@ fun DashboardScreen(
 
             Spacer(modifier = Modifier.height(dimens.spacingLg))
 
-            // Progress Summary Card
+            
             DailyProgressCard(doses = doses)
 
             Spacer(modifier = Modifier.height(dimens.spacingMd))
 
-            // Doses List
+            
             if (doses.isEmpty()) {
                 EmptyDoseState(
                     modifier = Modifier
@@ -237,7 +220,7 @@ fun DashboardScreen(
         }
     }
 
-    // Delete Confirmation Dialog
+    
     medicineToDelete?.let { medicine ->
         AlertDialog(
             onDismissRequest = { medicineToDelete = null },
@@ -263,14 +246,12 @@ fun DashboardScreen(
     }
 }
 
-// ─── Permission Warning Banner ───────────────────────────────────────────────
+
 
 @Composable
 private fun PermissionWarningBanner(
     hasNotificationPermission: Boolean,
     hasExactAlarmPermission: Boolean,
-    hasDndPermission: Boolean,
-    hasOverlayPermission: Boolean,
     context: Context,
     onRequestNotificationPermission: () -> Unit
 ) {
@@ -294,7 +275,7 @@ private fun PermissionWarningBanner(
             )
             Spacer(modifier = Modifier.height(dimens.spacingXs))
             Text(
-                text = "To ensure reminders ring reliably at the exact time (even in Do Not Disturb mode or on the Lock Screen), please grant the following permissions:",
+                text = "To ensure reminders ring reliably at the exact time, please grant the following permissions:",
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onErrorContainer.copy(alpha = 0.85f)
             )
@@ -315,35 +296,6 @@ private fun PermissionWarningBanner(
                     onClick = {
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
                             val intent = Intent(Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM, Uri.parse("package:${context.packageName}"))
-                            context.startActivity(intent)
-                        }
-                    }
-                )
-            }
-
-            if (!hasDndPermission) {
-                PermissionRow(
-                    label = "• Do Not Disturb (DND) bypass",
-                    buttonText = "Allow",
-                    onClick = {
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                            val intent = Intent(Settings.ACTION_NOTIFICATION_POLICY_ACCESS_SETTINGS)
-                            context.startActivity(intent)
-                        }
-                    }
-                )
-            }
-
-            if (!hasOverlayPermission) {
-                PermissionRow(
-                    label = "• Lock Screen overlay (Draw over apps)",
-                    buttonText = "Allow",
-                    onClick = {
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                            val intent = Intent(
-                                Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
-                                Uri.parse("package:${context.packageName}")
-                            )
                             context.startActivity(intent)
                         }
                     }
@@ -387,7 +339,7 @@ private fun PermissionRow(
     }
 }
 
-// ─── Empty State ─────────────────────────────────────────────────────────────
+
 
 @Composable
 private fun EmptyDoseState(modifier: Modifier = Modifier) {
@@ -435,7 +387,7 @@ private fun EmptyDoseState(modifier: Modifier = Modifier) {
     }
 }
 
-// ─── Date Selector Bar ───────────────────────────────────────────────────────
+
 
 @Composable
 fun DateSelectorBar(
@@ -454,11 +406,11 @@ fun DateSelectorBar(
     val dates = rememberDatesAround(today)
     val listState = rememberLazyListState()
 
-    // Smooth scroll to the selected date whenever selectedDate changes
+    
     LaunchedEffect(selectedDate) {
         val index = dates.indexOfFirst { it.timeInMillis == selectedDate }
         if (index >= 0) {
-            // Offset by 2 items so that the selected date is centered in the viewport
+            
             listState.animateScrollToItem(index = (index - 2).coerceAtLeast(0))
         }
     }
@@ -516,7 +468,7 @@ fun DateSelectorBar(
     }
 }
 
-// ─── Daily Progress Card ─────────────────────────────────────────────────────
+
 
 @Composable
 fun DailyProgressCard(doses: List<DoseSchedule>) {
@@ -527,7 +479,7 @@ fun DailyProgressCard(doses: List<DoseSchedule>) {
     val taken = doses.count { it.status == LogStatus.TAKEN }
     val targetProgress = if (total > 0) taken.toFloat() / total.toFloat() else 0f
 
-    // Animate progress bar smoothly
+    
     val animatedProgress by animateFloatAsState(
         targetValue = targetProgress,
         animationSpec = tween(durationMillis = 600),
@@ -586,7 +538,7 @@ fun DailyProgressCard(doses: List<DoseSchedule>) {
     }
 }
 
-// ─── Dose Card ───────────────────────────────────────────────────────────────
+
 
 @Composable
 fun DoseCard(
@@ -623,7 +575,7 @@ fun DoseCard(
                 .height(IntrinsicSize.Max),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            // Medicine color stripe indicator
+            
             Box(
                 modifier = Modifier
                     .width(6.dp)
@@ -636,7 +588,7 @@ fun DoseCard(
                     .weight(1f)
                     .padding(dimens.spacingLg)
             ) {
-                // Header Row (Name + Time)
+                
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween,
@@ -687,7 +639,7 @@ fun DoseCard(
                     }
                 }
 
-                // Instructions
+                
                 if (dose.medicine.instructions.isNotBlank()) {
                     Spacer(modifier = Modifier.height(dimens.spacingSm - 2.dp))
                     Text(
@@ -697,7 +649,7 @@ fun DoseCard(
                     )
                 }
 
-                // Low Stock Warning Banner
+                
                 dose.medicine.stockCount?.let { stock ->
                     val threshold = dose.medicine.stockLowThreshold ?: 5
                     if (stock <= threshold) {
@@ -721,7 +673,7 @@ fun DoseCard(
 
                 Spacer(modifier = Modifier.height(dimens.spacingMd))
 
-                // Action Buttons
+                
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.End,
@@ -729,7 +681,7 @@ fun DoseCard(
                 ) {
                     when (dose.status) {
                         null -> {
-                            // Skip Button
+                            
                             OutlinedButton(
                                 onClick = onSkip,
                                 modifier = Modifier
@@ -747,7 +699,7 @@ fun DoseCard(
                             
                             Spacer(modifier = Modifier.width(dimens.spacingMd))
 
-                            // Take Button
+                            
                             Button(
                                 onClick = onTake,
                                 modifier = Modifier
@@ -819,14 +771,14 @@ fun DoseCard(
     }
 }
 
-// ─── Helpers ─────────────────────────────────────────────────────────────────
+
 
 @Composable
 fun rememberDatesAround(anchorDateMillis: Long): List<Calendar> {
     return remember(anchorDateMillis) {
         val list = mutableListOf<Calendar>()
         val base = Calendar.getInstance().apply { timeInMillis = anchorDateMillis }
-        // We display 15 days before, the day itself, and 15 days after (31 days total)
+        
         for (i in -15..15) {
             val date = Calendar.getInstance().apply {
                 timeInMillis = base.timeInMillis

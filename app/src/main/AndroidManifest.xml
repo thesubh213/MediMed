@@ -2,14 +2,12 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <!-- Permissions for reminders and reliability -->
+    
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
     <uses-permission android:name="android.permission.USE_FULL_SCREEN_INTENT" />
-    <uses-permission android:name="android.permission.ACCESS_NOTIFICATION_POLICY" />
-    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
-    <!-- Optional: WAKE_LOCK to hold lock during database work in background -->
+    
     <uses-permission android:name="android.permission.WAKE_LOCK" />
 
     <application
@@ -35,7 +33,7 @@
             </intent-filter>
         </activity>
 
-        <!-- Full-Screen Reminder Activity -->
+        
         <activity
             android:name=".presentation.ReminderActivity"
             android:exported="false"
@@ -45,7 +43,7 @@
             android:launchMode="singleInstance"
             android:theme="@android:style/Theme.Material.NoActionBar" />
 
-        <!-- FileProvider for Sharing Temporary Photos from Camera Capture -->
+        
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.fileprovider"
@@ -56,7 +54,7 @@
                 android:resource="@xml/file_paths" />
         </provider>
 
-        <!-- Receiver for Alarms and System Broadcasts -->
+        
         <receiver
             android:name=".receiver.MedicineReminderReceiver"
             android:enabled="true"
@@ -66,7 +64,7 @@
                 <action android:name="android.intent.action.LOCKED_BOOT_COMPLETED" />
                 <action android:name="android.intent.action.TIME_SET" />
                 <action android:name="android.intent.action.TIMEZONE_CHANGED" />
-                <!-- Custom Actions for notifications -->
+                
                 <action android:name="com.medimed.app.ACTION_TAKE_MEDICINE" />
                 <action android:name="com.medimed.app.ACTION_SKIP_MEDICINE" />
                 <action android:name="com.medimed.app.ACTION_SNOOZE_MEDICINE" />

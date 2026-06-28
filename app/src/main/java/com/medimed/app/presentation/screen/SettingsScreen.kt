@@ -44,7 +44,7 @@ fun SettingsScreen(
     var showImportWarningDialog by remember { mutableStateOf(false) }
     var selectedImportUri by remember { mutableStateOf<Uri?>(null) }
 
-    // System File picker for JSON files
+    
     val filePickerLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.OpenDocument()
     ) { uri ->
@@ -80,7 +80,7 @@ fun SettingsScreen(
                 .padding(dimens.spacingXl),
             verticalArrangement = Arrangement.spacedBy(dimens.spacingXl)
         ) {
-            // Privacy Box
+            
             Card(
                 colors = CardDefaults.cardColors(
                     containerColor = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.4f)
@@ -114,7 +114,7 @@ fun SettingsScreen(
                 }
             }
 
-            // Section: Data Portability
+            
             Text(
                 "Data Backup & Restore",
                 style = MaterialTheme.typography.titleMedium,
@@ -135,7 +135,7 @@ fun SettingsScreen(
                     color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
                 )
 
-                // Export Button
+                
                 Button(
                     onClick = {
                         viewModel.exportData(
@@ -169,7 +169,7 @@ fun SettingsScreen(
                     Text("Export Data (JSON)", fontWeight = FontWeight.Bold)
                 }
 
-                // Import Button
+                
                 OutlinedButton(
                     onClick = {
                         filePickerLauncher.launch(arrayOf("application/json", "*/*"))
@@ -184,7 +184,7 @@ fun SettingsScreen(
                 }
             }
 
-            // Section: System Permissions
+            
             Text(
                 "System Notifications & Battery",
                 style = MaterialTheme.typography.titleMedium,
@@ -205,7 +205,7 @@ fun SettingsScreen(
                     color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
                 )
 
-                // Notification Settings Link
+                
                 Button(
                     onClick = {
                         val intent = Intent().apply {
@@ -228,7 +228,7 @@ fun SettingsScreen(
                     Text("Notification Settings", fontWeight = FontWeight.Bold)
                 }
 
-                // Battery Settings Link
+                
                 OutlinedButton(
                     onClick = {
                         val intent = Intent().apply {
@@ -247,7 +247,7 @@ fun SettingsScreen(
                 }
             }
 
-            // Version Indicator
+            
             Text(
                 text = "MediMed Version 1.0.0\nDesigned for Care and Privacy.",
                 style = MaterialTheme.typography.bodySmall,
@@ -260,7 +260,7 @@ fun SettingsScreen(
         }
     }
 
-    // Warning Dialog for Importing Data
+    
     if (showImportWarningDialog) {
         AlertDialog(
             onDismissRequest = { showImportWarningDialog = false },

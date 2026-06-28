@@ -54,7 +54,7 @@ class ReminderActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // Wake screen and show over lock screen
+        
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1) {
             setShowWhenLocked(true)
             setTurnScreenOn(true)
@@ -67,7 +67,7 @@ class ReminderActivity : ComponentActivity() {
             )
         }
 
-        // Dismiss keyguard
+        
         val keyguardManager = getSystemService(KEYGUARD_SERVICE) as KeyguardManager
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             keyguardManager.requestDismissKeyguard(this, null)
@@ -81,7 +81,7 @@ class ReminderActivity : ComponentActivity() {
         val scheduler = app.scheduler
         val notificationHelper = app.notificationHelper
 
-        // Start Ringtone & Vibration
+        
         startAlarm()
 
         setContent {
@@ -108,7 +108,7 @@ class ReminderActivity : ComponentActivity() {
 
     private fun startAlarm() {
         try {
-            // Ringtone
+            
             val alert: Uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM)
                 ?: RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE)
             ringtone = RingtoneManager.getRingtone(applicationContext, alert)?.apply {
@@ -121,7 +121,7 @@ class ReminderActivity : ComponentActivity() {
                 play()
             }
 
-            // Vibrator
+            
             vibrator = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
                 val vibratorManager = getSystemService(Context.VIBRATOR_MANAGER_SERVICE) as VibratorManager
                 vibratorManager.defaultVibrator
@@ -171,13 +171,13 @@ fun ReminderScreen(
     var loadFailed by remember { mutableStateOf(false) }
     val scope = rememberCoroutineScope()
 
-    // Auto-dismiss after 5 minutes to prevent indefinite alarm ringing
+    
     LaunchedEffect(Unit) {
         delay(5 * 60 * 1000L)
         onActionDone()
     }
 
-    // Load medicine details
+    
     LaunchedEffect(medicineId) {
         if (medicineId != -1L) {
             val result = repository.getMedicineById(medicineId)
@@ -193,7 +193,7 @@ fun ReminderScreen(
 
     when {
         loadFailed -> {
-            // Medicine was deleted or ID is invalid — show graceful error state
+            
             Box(
                 modifier = Modifier
                     .fillMaxSize()
@@ -249,7 +249,7 @@ fun ReminderScreen(
         }
 
         medicine == null -> {
-            // Loading state
+            
             Box(
                 modifier = Modifier.fillMaxSize(),
                 contentAlignment = Alignment.Center
@@ -298,7 +298,7 @@ fun ReminderScreen(
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.SpaceBetween
                 ) {
-                    // Top warning visual
+                    
                     Column(
                         horizontalAlignment = Alignment.CenterHorizontally,
                         modifier = Modifier.padding(top = dimens.spacingXxl + dimens.spacingXs)
@@ -318,7 +318,7 @@ fun ReminderScreen(
                         )
                     }
 
-                    // Medicine visual Card Container
+                    
                     Card(
                         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface.copy(alpha = 0.9f)),
                         shape = MaterialTheme.shapes.extraLarge,
@@ -336,7 +336,7 @@ fun ReminderScreen(
                             horizontalAlignment = Alignment.CenterHorizontally,
                             verticalArrangement = Arrangement.Center
                         ) {
-                            // Medicine image
+                            
                             Card(
                                 shape = MaterialTheme.shapes.large,
                                 colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
@@ -362,7 +362,7 @@ fun ReminderScreen(
                             
                             Spacer(modifier = Modifier.height(10.dp))
                             
-                            // Pill-shaped dosage badge
+                            
                             Box(
                                 modifier = Modifier
                                     .clip(MaterialTheme.shapes.small)
@@ -378,7 +378,7 @@ fun ReminderScreen(
                                 )
                             }
                             
-                            // Instructions Box
+                            
                             if (med.instructions.isNotBlank()) {
                                 Spacer(modifier = Modifier.height(dimens.spacingLg))
                                 Card(
@@ -402,14 +402,14 @@ fun ReminderScreen(
                         }
                     }
 
-                    // Action Buttons
+                    
                     Column(
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(bottom = dimens.spacingMd),
                         verticalArrangement = Arrangement.spacedBy(dimens.spacingLg)
                     ) {
-                        // TAKE Button
+                        
                         Button(
                             onClick = {
                                 scope.launch(Dispatchers.IO) {
@@ -421,7 +421,7 @@ fun ReminderScreen(
                                             actionTime = System.currentTimeMillis()
                                         )
                                         repository.insertLog(log)
-                                        // Update inventory with floor guard
+                                        
                                         med.stockCount?.let { currentStock ->
                                             if (currentStock > 0) {
                                                 repository.updateMedicine(med.copy(stockCount = currentStock - 1))
@@ -449,7 +449,7 @@ fun ReminderScreen(
                             modifier = Modifier.fillMaxWidth(),
                             horizontalArrangement = Arrangement.spacedBy(dimens.spacingLg)
                         ) {
-                            // SKIP Button
+                            
                             OutlinedButton(
                                 onClick = {
                                     scope.launch(Dispatchers.IO) {
@@ -479,12 +479,12 @@ fun ReminderScreen(
                                 Text("SKIP", fontWeight = FontWeight.Bold, style = MaterialTheme.typography.labelLarge)
                             }
 
-                            // SNOOZE Button
+                            
                             Button(
                                 onClick = {
                                     scope.launch(Dispatchers.IO) {
                                         try {
-                                            // Schedule snooze alarm
+                                            
                                             val snoozeTime = System.currentTimeMillis() + 10 * 60 * 1000L
                                             scheduler.scheduleSnoozeAlarm(med.id, scheduledTime, snoozeTime)
                                             notificationHelper.cancelNotification(med.id)

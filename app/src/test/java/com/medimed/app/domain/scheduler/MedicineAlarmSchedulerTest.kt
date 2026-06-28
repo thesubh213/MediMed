@@ -9,7 +9,7 @@ import java.util.Calendar
 
 class MedicineAlarmSchedulerTest {
 
-    // Simple stub context or mock is not needed for calculateNextDoseTime as it's a pure function!
+    
     private val scheduler = MedicineAlarmScheduler(DummyContext())
 
     @Test
@@ -28,10 +28,10 @@ class MedicineAlarmSchedulerTest {
             frequencyType = FrequencyType.DAILY,
             frequencyData = "",
             timesOfDay = listOf("08:00", "20:00"),
-            startDate = today8AM.timeInMillis - 2 * 60 * 60 * 1000 // started 2 hours ago
+            startDate = today8AM.timeInMillis - 2 * 60 * 60 * 1000 
         )
 
-        // If it's currently 07:00 AM today, next dose should be 08:00 AM today
+        
         val now7AM = Calendar.getInstance().apply {
             timeInMillis = today8AM.timeInMillis
             set(Calendar.HOUR_OF_DAY, 7)
@@ -64,10 +64,10 @@ class MedicineAlarmSchedulerTest {
             frequencyType = FrequencyType.DAILY,
             frequencyData = "",
             timesOfDay = listOf("08:00"),
-            startDate = today8AM.timeInMillis - 24 * 60 * 60 * 1000 // started yesterday
+            startDate = today8AM.timeInMillis - 24 * 60 * 60 * 1000 
         )
 
-        // If it's currently 09:00 AM today, next dose should be 08:00 AM tomorrow
+        
         val now9AM = Calendar.getInstance().apply {
             timeInMillis = today8AM.timeInMillis
             set(Calendar.HOUR_OF_DAY, 9)
@@ -94,7 +94,7 @@ class MedicineAlarmSchedulerTest {
             set(Calendar.MILLISECOND, 0)
         }
 
-        // Interval: every 8 hours starting at 08:00 AM
+        
         val medicine = Medicine(
             id = 1L,
             name = "Ibuprofen",
@@ -105,7 +105,7 @@ class MedicineAlarmSchedulerTest {
             startDate = today8AM.timeInMillis
         )
 
-        // If it's currently 09:00 AM today, next dose should be 04:00 PM today (8 hours after 08:00 AM)
+        
         val now9AM = Calendar.getInstance().apply {
             timeInMillis = today8AM.timeInMillis
             set(Calendar.HOUR_OF_DAY, 9)
@@ -116,18 +116,18 @@ class MedicineAlarmSchedulerTest {
 
         val expected = Calendar.getInstance().apply {
             timeInMillis = today8AM.timeInMillis
-            set(Calendar.HOUR_OF_DAY, 16) // 16:00 is 04:00 PM
+            set(Calendar.HOUR_OF_DAY, 16) 
         }.timeInMillis
 
         assertEquals(expected, nextDose)
     }
 }
 
-// A dummy context to instantiate the scheduler class for testing calculateNextDoseTime
-// since it accesses System ALARM_SERVICE but calculateNextDoseTime itself does not use context.
+
+
 class DummyContext : android.content.ContextWrapper(null) {
     override fun getSystemService(name: String): Any {
-        // Return dummy mock/null objects so constructor doesn't crash
+        
         return Any()
     }
     override fun getApplicationContext(): android.content.Context {

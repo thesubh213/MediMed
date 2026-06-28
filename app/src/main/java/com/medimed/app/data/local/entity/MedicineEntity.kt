@@ -10,9 +10,9 @@ data class MedicineEntity(
     @PrimaryKey(autoGenerate = true) val id: Long = 0,
     val name: String,
     val dosage: String,
-    val frequencyType: String, // DAILY, WEEKDAYS, INTERVAL
-    val frequencyData: String,  // serialised frequency settings
-    val timesOfDay: String,     // comma-separated "HH:mm" times
+    val frequencyType: String, 
+    val frequencyData: String,  
+    val timesOfDay: String,     
     val startDate: Long,
     val endDate: Long?,
     val instructions: String,

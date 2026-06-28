@@ -9,7 +9,7 @@ import com.medimed.app.notification.NotificationHelper
 
 class MediMedApp : Application() {
 
-    // Lazy initialisation of database and repositories
+    
     val database: MediMedDatabase by lazy {
         MediMedDatabase.getDatabase(this)
     }
@@ -29,7 +29,7 @@ class MediMedApp : Application() {
     override fun onCreate() {
         super.onCreate()
         
-        // Trigger notification channel creation
+        
         notificationHelper
     }
 }

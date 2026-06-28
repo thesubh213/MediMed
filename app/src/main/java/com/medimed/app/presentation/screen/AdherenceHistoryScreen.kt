@@ -66,7 +66,7 @@ fun AdherenceHistoryScreen(
                 .padding(paddingValues)
                 .background(MaterialTheme.colorScheme.background)
         ) {
-            // Stats Panel
+            
             AdherenceStatsPanel(
                 total = stats.totalDoses,
                 taken = stats.takenDoses,
@@ -116,7 +116,7 @@ fun AdherenceHistoryScreen(
     }
 }
 
-// ─── Empty History State ─────────────────────────────────────────────────────
+
 
 @Composable
 private fun EmptyHistoryState(modifier: Modifier = Modifier) {
@@ -164,7 +164,7 @@ private fun EmptyHistoryState(modifier: Modifier = Modifier) {
     }
 }
 
-// ─── Stats Panel ─────────────────────────────────────────────────────────────
+
 
 @Composable
 fun AdherenceStatsPanel(
@@ -239,7 +239,7 @@ fun StatColumn(
     }
 }
 
-// ─── History Log Card ────────────────────────────────────────────────────────
+
 
 @Composable
 fun HistoryLogCard(
@@ -273,7 +273,7 @@ fun HistoryLogCard(
                 .height(IntrinsicSize.Max),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            // Medicine color stripe indicator
+            
             Box(
                 modifier = Modifier
                     .width(6.dp)
@@ -318,7 +318,7 @@ fun HistoryLogCard(
                     )
                 }
 
-                // Undo Button (Delete log entry)
+                
                 IconButton(
                     onClick = onDeleteClick,
                     modifier = Modifier.size(dimens.minTouchTarget)

@@ -13,7 +13,7 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface MedicineDao {
 
-    // Medicine operations
+    
     @Query("SELECT * FROM medicines ORDER BY name ASC")
     fun getAllMedicines(): Flow<List<MedicineEntity>>
 
@@ -32,7 +32,7 @@ interface MedicineDao {
     @Delete
     suspend fun deleteMedicine(medicine: MedicineEntity)
 
-    // Medicine Logs operations
+    
     @Query("SELECT * FROM medicine_logs ORDER BY scheduledTime DESC")
     fun getAllLogs(): Flow<List<MedicineLogEntity>>
 

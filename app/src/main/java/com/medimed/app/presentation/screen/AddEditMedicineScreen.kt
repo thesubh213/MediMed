@@ -61,7 +61,7 @@ fun AddEditMedicineScreen(
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
 
-    // Form states — use rememberSaveable to survive configuration changes
+    
     var name by rememberSaveable { mutableStateOf("") }
     var dosage by rememberSaveable { mutableStateOf("") }
     var frequencyType by rememberSaveable { mutableStateOf(FrequencyType.DAILY) }
@@ -69,7 +69,7 @@ fun AddEditMedicineScreen(
     var imagePath by rememberSaveable { mutableStateOf<String?>(null) }
     var tempCameraFile by remember { mutableStateOf<File?>(null) }
     
-    // WEEKDAYS: list of active weekdays
+    
     val weekdays = rememberSaveable(
         saver = listSaver(
             save = { it.toList() },
@@ -80,10 +80,10 @@ fun AddEditMedicineScreen(
     }
     val daysList = listOf("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday")
 
-    // INTERVAL: hours interval
+    
     var intervalHours by rememberSaveable { mutableStateOf("8") }
 
-    // Times of day lists (e.g. "08:00")
+    
     val timesOfDay = rememberSaveable(
         saver = listSaver(
             save = { it.toList() },
@@ -95,17 +95,17 @@ fun AddEditMedicineScreen(
 
     var instructions by rememberSaveable { mutableStateOf("") }
 
-    // Stock tracking
+    
     var isTrackStock by rememberSaveable { mutableStateOf(false) }
     var stockCount by rememberSaveable { mutableStateOf("") }
     var stockThreshold by rememberSaveable { mutableStateOf("5") }
 
-    // Selected color hex
+    
     val paletteColors = listOf("#a53860", "#da627d", "#ffa5ab", "#f9dbbd", "#450920")
     val paletteNames = listOf("Berry Crush", "Blush Rose", "Cotton Candy", "Soft Apricot", "Night Bordeaux")
     var selectedColor by rememberSaveable { mutableStateOf(paletteColors[0]) }
 
-    // Error states
+    
     var nameError by rememberSaveable { mutableStateOf<String?>(null) }
     var dosageError by rememberSaveable { mutableStateOf<String?>(null) }
     var scheduleError by rememberSaveable { mutableStateOf<String?>(null) }
@@ -178,7 +178,7 @@ fun AddEditMedicineScreen(
                 .verticalScroll(rememberScrollState())
                 .padding(dimens.spacingXl)
         ) {
-            // Medicine Name Input
+            
             OutlinedTextField(
                 value = name,
                 onValueChange = {
@@ -196,7 +196,7 @@ fun AddEditMedicineScreen(
 
             Spacer(modifier = Modifier.height(dimens.spacingMd))
 
-            // Dosage Input
+            
             OutlinedTextField(
                 value = dosage,
                 onValueChange = {
@@ -214,7 +214,7 @@ fun AddEditMedicineScreen(
 
             Spacer(modifier = Modifier.height(dimens.spacingLg))
 
-            // Medicine Image picker section
+            
             Text(
                 "Medicine Image (Optional)",
                 style = MaterialTheme.typography.titleSmall,
@@ -234,7 +234,7 @@ fun AddEditMedicineScreen(
                         .padding(dimens.spacingLg),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    // Preview box
+                    
                     Box(
                         modifier = Modifier
                             .size(80.dp)
@@ -258,7 +258,7 @@ fun AddEditMedicineScreen(
                             horizontalArrangement = Arrangement.spacedBy(dimens.spacingSm),
                             modifier = Modifier.fillMaxWidth()
                         ) {
-                            // Camera Button
+                            
                             Button(
                                 onClick = { triggerCamera() },
                                 colors = ButtonDefaults.buttonColors(
@@ -271,7 +271,7 @@ fun AddEditMedicineScreen(
                             ) {
                                 Text("Camera", style = MaterialTheme.typography.labelMedium)
                             }
-                            // Gallery Button
+                            
                             Button(
                                 onClick = { galleryLauncher.launch("image/*") },
                                 colors = ButtonDefaults.buttonColors(
@@ -305,7 +305,7 @@ fun AddEditMedicineScreen(
 
             Spacer(modifier = Modifier.height(dimens.spacingLg))
 
-            // Color Selector
+            
             Text(
                 "Select Card Color Accent",
                 style = MaterialTheme.typography.titleSmall,
@@ -349,7 +349,7 @@ fun AddEditMedicineScreen(
 
             Spacer(modifier = Modifier.height(dimens.spacingXl))
 
-            // Frequency Tab Selector
+            
             Text(
                 "Frequency Schedule",
                 style = MaterialTheme.typography.titleSmall,
@@ -392,7 +392,7 @@ fun AddEditMedicineScreen(
 
             Spacer(modifier = Modifier.height(dimens.spacingMd))
 
-            // Contextual Schedule Config UI
+            
             when (frequencyType) {
                 FrequencyType.DAILY -> {
                     Text(
@@ -465,7 +465,7 @@ fun AddEditMedicineScreen(
 
             Spacer(modifier = Modifier.height(dimens.spacingXl))
 
-            // Time Selector
+            
             Text(
                 "Scheduled Reminder Times",
                 style = MaterialTheme.typography.titleSmall,
@@ -479,7 +479,7 @@ fun AddEditMedicineScreen(
                     .background(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f))
                     .padding(dimens.spacingMd)
             ) {
-                // List of times
+                
                 timesOfDay.forEach { time ->
                     Row(
                         modifier = Modifier
@@ -488,7 +488,7 @@ fun AddEditMedicineScreen(
                         horizontalArrangement = Arrangement.SpaceBetween,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        // Standard formatted time
+                        
                         val timeParts = time.split(":")
                         val hour = timeParts.getOrNull(0)?.toIntOrNull() ?: 0
                         val minute = timeParts.getOrNull(1)?.toIntOrNull() ?: 0
@@ -505,7 +505,7 @@ fun AddEditMedicineScreen(
                             modifier = Modifier.padding(start = dimens.spacingSm)
                         )
 
-                        // Remove Time Button
+                        
                         IconButton(
                             onClick = { timesOfDay.remove(time) },
                             modifier = Modifier.size(dimens.minTouchTarget)
@@ -530,7 +530,7 @@ fun AddEditMedicineScreen(
 
                 Spacer(modifier = Modifier.height(dimens.spacingSm))
 
-                // Add Time Button
+                
                 Button(
                     onClick = {
                         val calendar = Calendar.getInstance()
@@ -548,7 +548,7 @@ fun AddEditMedicineScreen(
                             },
                             calendar.get(Calendar.HOUR_OF_DAY),
                             calendar.get(Calendar.MINUTE),
-                            false // Use 12-hour format
+                            false 
                         ).show()
                     },
                     modifier = Modifier
@@ -570,7 +570,7 @@ fun AddEditMedicineScreen(
 
             Spacer(modifier = Modifier.height(dimens.spacingXl))
 
-            // Instructions Text Input
+            
             OutlinedTextField(
                 value = instructions,
                 onValueChange = { instructions = it },
@@ -583,7 +583,7 @@ fun AddEditMedicineScreen(
 
             Spacer(modifier = Modifier.height(dimens.spacingLg))
 
-            // Stock Tracking Toggles
+            
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -659,10 +659,10 @@ fun AddEditMedicineScreen(
 
             Spacer(modifier = Modifier.height(dimens.spacingXxxl))
 
-            // Save Button
+            
             Button(
                 onClick = {
-                    // Validation
+                    
                     var isValid = true
                     if (name.isBlank()) {
                         nameError = "Medicine name is required"
@@ -684,7 +684,7 @@ fun AddEditMedicineScreen(
                         scheduleError = "Please enter a valid hour interval"
                         isValid = false
                     }
-                    // Edge case: interval value validation
+                    
                     if (frequencyType == FrequencyType.INTERVAL) {
                         val hours = intervalHours.toIntOrNull()
                         if (hours != null && (hours < 1 || hours > 168)) {

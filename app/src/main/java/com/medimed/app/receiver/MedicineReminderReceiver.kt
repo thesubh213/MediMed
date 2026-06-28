@@ -22,12 +22,12 @@ class MedicineReminderReceiver : BroadcastReceiver() {
     companion object {
         private const val TAG = "MedicineReceiver"
 
-        // Actions
+        
         const val ACTION_TAKE_MEDICINE = "com.medimed.app.ACTION_TAKE_MEDICINE"
         const val ACTION_SKIP_MEDICINE = "com.medimed.app.ACTION_SKIP_MEDICINE"
         const val ACTION_SNOOZE_MEDICINE = "com.medimed.app.ACTION_SNOOZE_MEDICINE"
 
-        // Snooze duration in milliseconds (10 minutes)
+        
         private const val SNOOZE_DURATION_MS = 10 * 60 * 1000L
     }
 
@@ -61,11 +61,11 @@ class MedicineReminderReceiver : BroadcastReceiver() {
                         if (medicineId != -1L && scheduledTime != -1L) {
                             val medicine = repository.getMedicineById(medicineId)
                             if (medicine != null && medicine.isActive) {
-                                // 1. Post notification
+                                
                                 Log.i(TAG, "Triggering notification reminder for ${medicine.name}")
                                 notificationHelper.showReminderNotification(medicine, scheduledTime)
 
-                                // 2. Immediately schedule the next dose for this medicine
+                                
                                 scheduler.scheduleAlarmForMedicine(medicine)
                             }
                         }
@@ -78,7 +78,7 @@ class MedicineReminderReceiver : BroadcastReceiver() {
                         if (medicineId != -1L && scheduledTime != -1L) {
                             val medicine = repository.getMedicineById(medicineId)
                             if (medicine != null) {
-                                // Record the positive compliance log
+                                
                                 val log = MedicineLog(
                                     medicineId = medicineId,
                                     scheduledTime = scheduledTime,
@@ -87,7 +87,7 @@ class MedicineReminderReceiver : BroadcastReceiver() {
                                 )
                                 repository.insertLog(log)
 
-                                // Handle optional inventory/stock tracking
+                                
                                 medicine.stockCount?.let { currentStock ->
                                     if (currentStock > 0) {
                                         val updatedMedicine = medicine.copy(
@@ -110,7 +110,7 @@ class MedicineReminderReceiver : BroadcastReceiver() {
                         if (medicineId != -1L && scheduledTime != -1L) {
                             val medicine = repository.getMedicineById(medicineId)
                             if (medicine != null) {
-                                // Record the skip log
+                                
                                 val log = MedicineLog(
                                     medicineId = medicineId,
                                     scheduledTime = scheduledTime,

@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+    <!-- Background / Soft Glow -->
+    <circle cx="256" cy="256" r="130" fill="#ffffff" fill-opacity="0.08"/>
+    
+    <!-- Capsule Top Half (Soft Apricot) -->
+    <path d="M 181,196 A 50,50 0 0,1 281,196 L 281,256 L 181,256 Z" fill="#F9DBBD"/>
+    
+    <!-- Capsule Bottom Half (Cotton Candy) -->
+    <path d="M 181,256 L 281,256 L 281,316 A 50,50 0 0,1 181,316 Z" fill="#FFA5AB"/>
+    
+    <!-- Center Divider Line -->
+    <path d="M 181,252 H 281 V 260 H 181 Z" fill="#450920" fill-opacity="0.6"/>
+    
+    <!-- Pill Highlight Reflection (Premium Gloss) -->
+    <path d="M 198,171 Q 208,156 222,156 L 222,166 Q 212,166 198,171 Z" fill="#ffffff" fill-opacity="0.35"/>
+    
+    <!-- Medical Cross Circle (Blush Rose) -->
+    <circle cx="293" cy="191" r="38" fill="#DA627D"/>
+    
+    <!-- Medical Cross (White) -->
+    <!-- Horizontal bar -->
+    <path d="M 269,186 H 317 V 196 H 269 Z" fill="#ffffff"/>
+    <!-- Vertical bar -->
+    <path d="M 288,167 H 298 V 215 H 288 Z" fill="#ffffff"/>
+</svg>

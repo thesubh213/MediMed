@@ -15,7 +15,7 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
 
-// Accessibility-compliant color scheme mappings using centralized Color.kt values
+
 private val LightColorScheme = lightColorScheme(
     primary = BerryCrush,
     onPrimary = Color.White,
@@ -29,7 +29,7 @@ private val LightColorScheme = lightColorScheme(
     onBackground = NightBordeaux,
     surface = LightSurface,
     onSurface = NightBordeaux,
-    surfaceVariant = SoftApricot,      // Use SoftApricot for secondary surface containers
+    surfaceVariant = SoftApricot,      
     onSurfaceVariant = NightBordeaux,
     outline = BlushRose,
     error = LightError,
@@ -71,10 +71,10 @@ private fun Context.findActivity(): Activity? {
 
 @Composable
 fun MediMedTheme(
-    darkTheme: Boolean = false, // Always force light background theme
+    darkTheme: Boolean = false, 
     content: @Composable () -> Unit
 ) {
-    // Force light scheme to completely disable dark mode
+    
     val colorScheme = LightColorScheme
     val view = LocalView.current
 
@@ -86,7 +86,7 @@ fun MediMedTheme(
                 window.statusBarColor = colorScheme.background.toArgb()
                 window.navigationBarColor = colorScheme.surfaceVariant.toArgb()
 
-                // Always light status/navigation bar icons (since we've forced light mode background/surface)
+                
                 val isDark = false
                 WindowCompat.getInsetsController(window, view).apply {
                     isAppearanceLightStatusBars = !isDark

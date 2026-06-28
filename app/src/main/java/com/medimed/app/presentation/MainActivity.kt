@@ -41,7 +41,7 @@ class MainActivity : ComponentActivity() {
 
     private lateinit var viewModel: MainViewModel
 
-    // Permission launcher for notifications
+    
     private val requestNotificationPermissionLauncher = registerForActivityResult(
         ActivityResultContracts.RequestPermission()
     ) { isGranted ->
@@ -55,12 +55,12 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // Inject repositories manually from MediMedApp
+        
         val app = application as MediMedApp
         val factory = MainViewModelFactory(app.repository, app.scheduler)
         viewModel = ViewModelProvider(this, factory)[MainViewModel::class.java]
 
-        // Handle permissions
+        
         checkAndRequestPermissions()
 
         setContent {
@@ -76,7 +76,7 @@ class MainActivity : ComponentActivity() {
     }
 
     private fun checkAndRequestPermissions() {
-        // Notification permissions on API 33+
+        
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             val permissionStatus = ContextCompat.checkSelfPermission(
                 this,
@@ -87,12 +87,12 @@ class MainActivity : ComponentActivity() {
             }
         }
 
-        // Exact alarm permissions on API 31+
+        
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             val alarmManager = getSystemService(ALARM_SERVICE) as android.app.AlarmManager
             if (!alarmManager.canScheduleExactAlarms()) {
-                // We ask politely by directing the user when they navigate to Settings,
-                // or show a toast to warn them exact scheduling is not permitted by default.
+                
+                
                 Toast.makeText(
                     this,
                     "To receive exact on-time reminders, please ensure exact alarms are permitted for MediMed.",
@@ -125,7 +125,7 @@ fun AppMainLayout(viewModel: MainViewModel) {
                 NavigationBar(
                     containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.8f)
                 ) {
-                    // Dashboard Navigation
+                    
                     NavigationBarItem(
                         selected = activeTab == MainTab.DASHBOARD,
                         onClick = { activeTab = MainTab.DASHBOARD },
@@ -133,7 +133,7 @@ fun AppMainLayout(viewModel: MainViewModel) {
                         icon = { Icon(Icons.Default.Home, contentDescription = "Daily schedule list") }
                     )
 
-                    // History Navigation
+                    
                     NavigationBarItem(
                         selected = activeTab == MainTab.HISTORY,
                         onClick = { activeTab = MainTab.HISTORY },
@@ -141,7 +141,7 @@ fun AppMainLayout(viewModel: MainViewModel) {
                         icon = { Icon(Icons.AutoMirrored.Filled.List, contentDescription = "Medication adherence history logs") }
                     )
 
-                    // Settings Navigation
+                    
                     NavigationBarItem(
                         selected = activeTab == MainTab.SETTINGS,
                         onClick = { activeTab = MainTab.SETTINGS },
@@ -153,7 +153,7 @@ fun AppMainLayout(viewModel: MainViewModel) {
         ) { paddingValues ->
             val modifier = Modifier.padding(paddingValues)
 
-            // Crossfade between tabs for smooth transitions
+            
             AnimatedContent(
                 targetState = activeTab,
                 transitionSpec = {

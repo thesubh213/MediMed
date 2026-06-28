@@ -38,24 +38,24 @@ class MainViewModel(
 
     private val TAG = "MainViewModel"
 
-    // Selected day in the calendar dashboard, starting at midnight of that day
+    
     val selectedDate = MutableStateFlow<Long>(getTodayMidnight())
 
-    // All active and inactive medicines in the database
+    
     val medicines = repository.getAllMedicines().stateIn(
         viewModelScope,
         SharingStarted.WhileSubscribed(5000),
         emptyList()
     )
 
-    // All completion logs in the database
+    
     val logs = repository.getAllLogs().stateIn(
         viewModelScope,
         SharingStarted.WhileSubscribed(5000),
         emptyList()
     )
 
-    // Daily schedules for the currently selected date
+    
     val selectedDateDoses: StateFlow<List<DoseSchedule>> = combine(
         selectedDate,
         medicines,
@@ -68,7 +68,7 @@ class MainViewModel(
         emptyList()
     )
 
-    // Adherence Stats
+    
     val adherenceStats: StateFlow<AdherenceSummary> = logs.combine(medicines) { logsList, medsList ->
         val total = logsList.size
         val taken = logsList.count { it.status == LogStatus.TAKEN }
@@ -90,7 +90,7 @@ class MainViewModel(
             try {
                 val medicine = repository.getMedicineById(medicineId) ?: return@launch
 
-                // 1. Insert log as TAKEN
+                
                 val log = MedicineLog(
                     medicineId = medicineId,
                     scheduledTime = scheduledTime,
@@ -99,13 +99,13 @@ class MainViewModel(
                 )
                 repository.insertLog(log)
 
-                // 2. Decrement stock with floor guard to prevent negative values
+                
                 medicine.stockCount?.let { count ->
                     val newCount = (count - 1).coerceAtLeast(0)
                     repository.updateMedicine(medicine.copy(stockCount = newCount))
                 }
 
-                // 3. Immediately trigger scheduling of the next dose
+                
                 scheduler.scheduleAlarmForMedicine(medicine)
             } catch (e: Exception) {
                 Log.e(TAG, "Failed to record taken dose for medicineId=$medicineId", e)
@@ -118,7 +118,7 @@ class MainViewModel(
             try {
                 val medicine = repository.getMedicineById(medicineId) ?: return@launch
 
-                // 1. Insert log as SKIPPED
+                
                 val log = MedicineLog(
                     medicineId = medicineId,
                     scheduledTime = scheduledTime,
@@ -127,7 +127,7 @@ class MainViewModel(
                 )
                 repository.insertLog(log)
 
-                // 2. Trigger scheduling of the next dose
+                
                 scheduler.scheduleAlarmForMedicine(medicine)
             } catch (e: Exception) {
                 Log.e(TAG, "Failed to record skipped dose for medicineId=$medicineId", e)
@@ -141,17 +141,17 @@ class MainViewModel(
                 val medicine = repository.getMedicineById(medicineId) ?: return@launch
                 val existingLog = repository.getLogForDose(medicineId, scheduledTime)
 
-                // Revert stock count if it was marked TAKEN previously
+                
                 if (existingLog?.status == LogStatus.TAKEN) {
                     medicine.stockCount?.let { count ->
                         repository.updateMedicine(medicine.copy(stockCount = count + 1))
                     }
                 }
 
-                // Delete log
+                
                 repository.deleteLogForDose(medicineId, scheduledTime)
 
-                // Reschedule in case it was the current upcoming alarm
+                
                 scheduler.scheduleAlarmForMedicine(medicine)
             } catch (e: Exception) {
                 Log.e(TAG, "Failed to delete dose log for medicineId=$medicineId", e)
@@ -182,7 +182,7 @@ class MainViewModel(
         }
     }
 
-    // --- Helper calculations ---
+    
     private fun getTodayMidnight(): Long {
         return Calendar.getInstance().apply {
             set(Calendar.HOUR_OF_DAY, 0)
@@ -233,11 +233,11 @@ class MainViewModel(
 
         for (medicine in medicinesList) {
             if (!medicine.isActive) continue
-            // Check start/end dates
+            
             if (medicine.startDate > endOfDay) continue
             if (medicine.endDate != null && medicine.endDate < startOfDay) continue
 
-            // Check if medicine matches schedule for this date
+            
             var isScheduled = false
             when (medicine.frequencyType) {
                 FrequencyType.DAILY -> {
@@ -249,7 +249,7 @@ class MainViewModel(
                     isScheduled = activeDays.contains(dayOfWeekStr)
                 }
                 FrequencyType.INTERVAL -> {
-                    // Check if selected date contains any step times
+                    
                     val intervalHours = medicine.frequencyData.toIntOrNull() ?: 0
                     if (intervalHours > 0) {
                         val intervalMillis = intervalHours.toLong() * 60 * 60 * 1000
@@ -267,7 +267,7 @@ class MainViewModel(
                         }.timeInMillis
 
                         if (endOfDay >= sequenceStart) {
-                            // Find steps that land on this date
+                            
                             val diff = startOfDay - sequenceStart
                             var stepIndex = if (diff < 0) 0 else diff / intervalMillis
                             var candidate = sequenceStart + (stepIndex * intervalMillis)
@@ -295,7 +295,7 @@ class MainViewModel(
                 }
             }
 
-            // For DAILY and WEEKDAYS, evaluate times of day
+            
             if (isScheduled && medicine.frequencyType != FrequencyType.INTERVAL) {
                 for (timeStr in medicine.timesOfDay) {
                     val timeParts = timeStr.split(":")
@@ -330,7 +330,7 @@ class MainViewModel(
         return doses.sortedBy { it.scheduledTime }
     }
 
-    // --- JSON Backup Export / Import ---
+    
     fun exportData(context: Context, onSuccess: (String) -> Unit, onError: (Exception) -> Unit) {
         viewModelScope.launch {
             try {
@@ -339,7 +339,7 @@ class MainViewModel(
 
                 val rootJson = JSONObject()
                 
-                // Export Medicines
+                
                 val medsArray = JSONArray()
                 for (med in allMeds) {
                     val medJson = JSONObject().apply {
@@ -362,7 +362,7 @@ class MainViewModel(
                 }
                 rootJson.put("medicines", medsArray)
 
-                // Export Logs
+                
                 val logsArray = JSONArray()
                 for (log in allLogs) {
                     val logJson = JSONObject().apply {
@@ -377,7 +377,7 @@ class MainViewModel(
                 }
                 rootJson.put("logs", logsArray)
 
-                // Write file to external downloads folder
+                
                 val timestamp = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())
                 val fileName = "medimed_backup_$timestamp.json"
                 val downloadsDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
@@ -415,15 +415,15 @@ class MainViewModel(
                 val medsArray = rootJson.getJSONArray("medicines")
                 val logsArray = rootJson.getJSONArray("logs")
 
-                // First wipe current table and cancel alarms
+                
                 val oldMeds = repository.getAllMedicines().first()
                 for (med in oldMeds) {
                     scheduler.cancelAlarmForMedicine(med)
                     repository.deleteMedicine(med)
                 }
 
-                // Insert Medicines
-                val medIdMapping = mutableMapOf<Long, Long>() // Map old ID to newly generated ID
+                
+                val medIdMapping = mutableMapOf<Long, Long>() 
                 for (i in 0 until medsArray.length()) {
                     val item = medsArray.getJSONObject(i)
                     val oldId = item.getLong("id")
@@ -453,13 +453,13 @@ class MainViewModel(
                     medIdMapping[oldId] = newId
                 }
 
-                // Insert Logs
+                
                 for (i in 0 until logsArray.length()) {
                     val item = logsArray.getJSONObject(i)
                     val oldMedId = item.getLong("medicineId")
                     val newMedId = medIdMapping[oldMedId]
 
-                    // If medicine exists, insert log
+                    
                     if (newMedId != null) {
                         val log = MedicineLog(
                             medicineId = newMedId,
@@ -472,7 +472,7 @@ class MainViewModel(
                     }
                 }
 
-                // Reschedule all alarms for imported medicines
+                
                 scheduler.rescheduleAllAlarms(repository)
                 onSuccess()
             } catch (e: Exception) {

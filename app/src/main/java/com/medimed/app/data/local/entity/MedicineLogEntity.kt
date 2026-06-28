@@ -23,7 +23,7 @@ data class MedicineLogEntity(
     @PrimaryKey(autoGenerate = true) val id: Long = 0,
     val medicineId: Long,
     val scheduledTime: Long,
-    val status: String, // TAKEN, SKIPPED
+    val status: String, 
     val actionTime: Long,
     val notes: String?
 ) {

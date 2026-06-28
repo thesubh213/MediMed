@@ -41,7 +41,7 @@ class NotificationHelper(private val context: Context) {
             ).apply {
                 description = CHANNEL_DESCRIPTION
                 enableLights(true)
-                lightColor = Color.parseColor("#a53860") // Berry Crush accent
+                lightColor = Color.parseColor("#a53860") 
                 enableVibration(true)
                 lockscreenVisibility = NotificationCompat.VISIBILITY_PUBLIC
             }
@@ -49,13 +49,11 @@ class NotificationHelper(private val context: Context) {
         }
     }
 
-    /**
-     * Shows a heads-up notification for the given medicine reminder.
-     */
+    
     fun showReminderNotification(medicine: Medicine, scheduledTime: Long) {
         val notificationId = medicine.id.toInt()
 
-        // Content intent (opens MainActivity when notification is tapped)
+        
         val contentIntent = Intent(context, MainActivity::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         }
@@ -66,7 +64,7 @@ class NotificationHelper(private val context: Context) {
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
 
-        // Full Screen Intent (triggers full screen ReminderActivity overlay)
+        
         val fullScreenIntent = Intent(context, ReminderActivity::class.java).apply {
             putExtra(EXTRA_MEDICINE_ID, medicine.id)
             putExtra(EXTRA_SCHEDULED_TIME, scheduledTime)
@@ -79,7 +77,7 @@ class NotificationHelper(private val context: Context) {
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
 
-        // Action intent: MARK AS TAKEN
+        
         val takeIntent = Intent(context, MedicineReminderReceiver::class.java).apply {
             action = MedicineReminderReceiver.ACTION_TAKE_MEDICINE
             putExtra(EXTRA_MEDICINE_ID, medicine.id)
@@ -87,12 +85,12 @@ class NotificationHelper(private val context: Context) {
         }
         val takePendingIntent = PendingIntent.getBroadcast(
             context,
-            notificationId + 100000, // offset request code to ensure uniqueness
+            notificationId + 100000, 
             takeIntent,
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
 
-        // Action intent: SKIP
+        
         val skipIntent = Intent(context, MedicineReminderReceiver::class.java).apply {
             action = MedicineReminderReceiver.ACTION_SKIP_MEDICINE
             putExtra(EXTRA_MEDICINE_ID, medicine.id)
@@ -105,7 +103,7 @@ class NotificationHelper(private val context: Context) {
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
 
-        // Action intent: SNOOZE (10 minutes)
+        
         val snoozeIntent = Intent(context, MedicineReminderReceiver::class.java).apply {
             action = MedicineReminderReceiver.ACTION_SNOOZE_MEDICINE
             putExtra(EXTRA_MEDICINE_ID, medicine.id)
@@ -140,19 +138,19 @@ class NotificationHelper(private val context: Context) {
             null
         }
 
-        // Build notification
+        
         val builder = NotificationCompat.Builder(context, CHANNEL_ID)
             .setSmallIcon(R.drawable.ic_notification_small)
             .setContentTitle("Medicine Reminder: ${medicine.name}")
             .setContentText("Please take ${medicine.dosage}$textInstructions")
             .setPriority(NotificationCompat.PRIORITY_HIGH)
-            .setCategory(NotificationCompat.CATEGORY_ALARM) // CATEGORY_ALARM triggers full screen more reliably
+            .setCategory(NotificationCompat.CATEGORY_ALARM) 
             .setContentIntent(contentPendingIntent)
-            .setFullScreenIntent(fullScreenPendingIntent, true) // Launch full screen ReminderActivity overlay
+            .setFullScreenIntent(fullScreenPendingIntent, true) 
             .setAutoCancel(false)
-            .setOngoing(true) // Keeps notification on screen until acted upon
-            .setColor(Color.parseColor(medicine.colorHex)) // Color-coded
-            .setColorized(false) // De-colorize background to maintain Material Design standards
+            .setOngoing(true) 
+            .setColor(Color.parseColor(medicine.colorHex)) 
+            .setColorized(false) 
             .addAction(R.drawable.ic_check, "Take", takePendingIntent)
             .addAction(R.drawable.ic_clear, "Skip", skipPendingIntent)
             .addAction(R.drawable.ic_snooze, "Snooze (10m)", snoozePendingIntent)
@@ -170,14 +168,12 @@ class NotificationHelper(private val context: Context) {
         try {
             notificationManager.notify(notificationId, builder.build())
         } catch (e: SecurityException) {
-            // Can happen on some restricted Android forks if permissions change dynamically
+            
             e.printStackTrace()
         }
     }
 
-    /**
-     * Cancels a pending notification.
-     */
+    
     fun cancelNotification(medicineId: Long) {
         notificationManager.cancel(medicineId.toInt())
     }

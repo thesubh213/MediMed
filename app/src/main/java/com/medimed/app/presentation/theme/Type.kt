@@ -6,18 +6,9 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 
-/**
- * MediMed Typography Scale
- *
- * Uses the system default font family (Roboto on most Android devices) with a
- * carefully configured type scale that establishes clear visual hierarchy.
- *
- * Naming follows Material3 semantic roles so standard components automatically
- * inherit these styles. Screens should reference [MaterialTheme.typography]
- * instead of building ad-hoc TextStyle instances.
- */
+
 val MediMedTypography = Typography(
-    // ─── Display ─────────────────────────────────────────────────────────
+    
     displayLarge = TextStyle(
         fontFamily = FontFamily.Default,
         fontWeight = FontWeight.ExtraBold,
@@ -40,7 +31,7 @@ val MediMedTypography = Typography(
         letterSpacing = 0.sp
     ),
 
-    // ─── Headline ────────────────────────────────────────────────────────
+    
     headlineLarge = TextStyle(
         fontFamily = FontFamily.Default,
         fontWeight = FontWeight.ExtraBold,
@@ -63,7 +54,7 @@ val MediMedTypography = Typography(
         letterSpacing = 0.sp
     ),
 
-    // ─── Title ───────────────────────────────────────────────────────────
+    
     titleLarge = TextStyle(
         fontFamily = FontFamily.Default,
         fontWeight = FontWeight.Bold,
@@ -86,7 +77,7 @@ val MediMedTypography = Typography(
         letterSpacing = 0.1.sp
     ),
 
-    // ─── Body ────────────────────────────────────────────────────────────
+    
     bodyLarge = TextStyle(
         fontFamily = FontFamily.Default,
         fontWeight = FontWeight.Normal,
@@ -109,7 +100,7 @@ val MediMedTypography = Typography(
         letterSpacing = 0.4.sp
     ),
 
-    // ─── Label ───────────────────────────────────────────────────────────
+    
     labelLarge = TextStyle(
         fontFamily = FontFamily.Default,
         fontWeight = FontWeight.Bold,
